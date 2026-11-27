@@ -1,0 +1,40 @@
+---
+layout: base.njk
+pagination:
+  data: projects
+  size: 1
+  alias: project
+permalink: "/projects/{{ project.slug }}/index.html"
+eleventyComputed:
+  title: "{{ project.title }} | Benedict's Portfolio"
+  description: "{{ project.summary }}"
+---
+<section>
+    <p><a href="{{ '/projects/' | url }}">Back to all projects</a></p>
+    <p class="eyebrow">{{ project.context }}</p>
+    <h1>{{ project.title }}</h1>
+    <p>{{ project.overview }}</p>
+    <p><strong>Tools:</strong> {{ project.tools | join(', ') }}</p>
+    {% if project.image %}
+    <figure>
+        <img src="{{ project.image | url }}" alt="{{ project.imageAlt }}" width="600" loading="lazy">
+        <figcaption>{{ project.imageCaption }}</figcaption>
+    </figure>
+    {% endif %}
+    <h2>What I worked on</h2>
+    <ol>{% for step in project.process %}<li>{{ step }}</li>{% endfor %}</ol>
+    <h2>What I learned</h2>
+    <p>{{ project.learning }}</p>
+</section>
+{% if project.repository %}
+<section id="source-activity" aria-labelledby="source-heading">
+    <h2 id="source-heading">Look at the earlier portfolio source</h2>
+    <p>If you're reviewing how this site developed, the HW5 repository is the previous version. Check its public activity before opening the code. These dates describe the repository, not whether an individual change is finished.</p>
+    <button type="button" id="repo-mode-toggle" aria-controls="portfolio-repo" aria-expanded="true" hidden>Hide repository details</button>
+    <repo-panel id="portfolio-repo" repository="{{ project.repository }}">
+        <p>The earlier version's source is available on <a href="https://github.com/{{ project.repository }}">GitHub: {{ project.repository }}</a>.</p>
+        <p>Live repository activity is available when JavaScript loads.</p>
+    </repo-panel>
+    <noscript><p>JavaScript is off. You can still read this project and open the repository using the link above.</p></noscript>
+</section>
+{% endif %}

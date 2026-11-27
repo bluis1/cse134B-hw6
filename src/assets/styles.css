@@ -1,0 +1,468 @@
+:root {
+    --background: #0d1b2a;
+    --background-end: #1d3557;
+    --section-color: #263c59;
+    --nav-color: #24476b;
+    --nav-text-color: #fdf6e3;
+    --gold: #f4c95d;
+    --orange: #e9a03b;
+    --blue: #a8dadc;
+    --text-color: #fdf6e3;
+    --content-width: 1000px;
+    --control-background: #ffffff;
+    --control-text: #17253a;
+    --error-color: #ffb4ab;
+    --success-color: #b7efc5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    view-transition-name: page;
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--text-color);
+    line-height: 1.7;
+    background-color: var(--background);
+    background-image: linear-gradient(to bottom, var(--background), var(--background-end));
+}
+
+body.light-theme {
+    --background: #f5f1e8;
+    --background-end: #dce8ed;
+    --section-color: #fffaf0;
+    --nav-color: #315a72;
+    --nav-text-color: #ffffff;
+    --gold: #8a5a00;
+    --orange: #b65324;
+    --blue: #164e63;
+    --text-color: #1d2730;
+    --control-background: #ffffff;
+    --control-text: #17253a;
+    --error-color: #a52a2a;
+    --success-color: #176b3a;
+}
+
+body.light-theme header {
+    background: linear-gradient(120deg, #dce8ed, #b9d1da, #8fb4c0);
+}
+
+body.light-theme main article,
+body.light-theme course-note {
+    background-color: #e7eef0;
+}
+
+body.light-theme > footer {
+    background-color: #d3e2e5;
+}
+
+/* Header */
+
+body > header {
+    background: linear-gradient(120deg, #1d3557, #24476b, #457b9d);
+    border-bottom: 4px solid var(--orange);
+    padding: 2.5rem 1.5rem;
+}
+
+.site-title {
+    max-width: var(--content-width);
+    margin: 0 auto 1.5rem;
+    color: var(--gold);
+    font-size: 3.2rem;
+    font-weight: bold;
+}
+
+/* Navigation */
+
+header nav {
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+/* The list directly inside the navigation */
+header nav > ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav a {
+    display: block;
+    background-color: var(--nav-color);
+    color: var(--nav-text-color);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 0.65em 1.2em;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    background-color: var(--gold);
+    color: var(--background);
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+}
+
+#theme-toggle[hidden],
+.js-only[hidden] {
+    display: none;
+}
+
+/* Main content */
+
+main {
+    max-width: var(--content-width);
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    min-width: 0;
+}
+
+main section {
+    background-color: var(--section-color);
+    border-left: 5px solid var(--orange);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    min-width: 0;
+}
+
+h1, h2 {
+    color: var(--gold);
+    font-size: 1.8rem;
+    margin-top: 0;
+}
+
+main h1 { font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.25; }
+main h2 { line-height: 1.3; }
+.eyebrow { color: var(--blue); margin-top: 0; }
+.primary-link { display: inline-block; margin: 0.4rem 1rem 0.4rem 0; font-weight: bold; }
+header nav a[aria-current="page"] { border-bottom-width: 4px; font-weight: bold; }
+.skip-link { position: absolute; left: 1rem; top: -8rem; padding: 0.7rem; background: var(--background); z-index: 2; }
+.skip-link:focus { top: 0.5rem; }
+[hidden] { display: none !important; }
+figure { margin-inline: 0; }
+figcaption { color: var(--blue); }
+main { overflow-wrap: anywhere; }
+
+h3 {
+    color: var(--blue);
+    font-size: 1.3rem;
+}
+
+/* Paragraph right after an h2 */
+h2 + p {
+    margin-top: 0.5rem;
+}
+
+p,
+li {
+    line-height: 1.7;
+}
+
+/* Project information */
+
+main article {
+    background-color: #1c304d;
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+main article h3 {
+    margin-top: 0;
+}
+
+/* Links */
+
+a {
+    color: var(--gold);
+}
+
+/* Links to other HTML pages */
+main a[href$=".html"] {
+    color: var(--blue);
+    font-weight: bold;
+}
+
+main a:hover {
+    color: var(--gold);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+}
+
+/* Forms */
+
+form {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+fieldset {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 0;
+}
+
+legend {
+    color: var(--text-color);
+    padding: 0 0.5rem;
+}
+
+input,
+textarea,
+button,
+select {
+    font: inherit;
+    max-width: 100%;
+}
+
+input,
+textarea,
+select {
+    padding: 0.6em;
+    background-color: var(--control-background);
+    color: var(--control-text);
+    border: 1px solid var(--blue);
+    border-radius: 5px;
+}
+
+.form-instructions {
+    margin-top: 0;
+}
+
+.form-field {
+    display: grid;
+    gap: 0.35rem;
+    margin: 1rem 0;
+}
+
+.form-field label {
+    font-weight: bold;
+}
+
+.form-field small {
+    color: var(--blue);
+}
+
+.form-field input:user-invalid,
+.form-field textarea:user-invalid {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 1px var(--error-color);
+}
+
+.form-field input:user-valid,
+.form-field textarea:user-valid {
+    border-color: var(--success-color);
+}
+
+.feedback {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-left: 4px solid var(--orange);
+}
+
+.feedback:empty {
+    display: none;
+}
+
+.error-message {
+    color: var(--error-color);
+}
+
+.info-message {
+    color: var(--blue);
+}
+
+.info-message.warning {
+    color: var(--orange);
+    font-weight: bold;
+}
+
+.info-message.at-limit {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @view-transition { navigation: none; }
+
+    *,
+    *::before,
+    *::after {
+        view-transition-name: none !important;
+    }
+}
+
+/* Make contact fields fit inside the form */
+form input[type="text"],
+form input[type="email"],
+form textarea {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
+
+form textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: var(--nav-color);
+    color: var(--nav-text-color);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.7em 1.2em;
+    cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+}
+
+button:hover {
+    background-color: var(--gold);
+    color: var(--background);
+}
+
+/* Images and media */
+
+img,
+video,
+audio,
+iframe,
+canvas {
+    max-width: 100%;
+}
+
+img {
+    height: auto;
+    border-radius: 8px;
+}
+
+course-note {
+    display: block;
+    background-color: #1c304d;
+    border-left: 3px solid var(--gold);
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+dialog[open] {
+    position: static;
+    max-width: 100%;
+    margin: 1rem 0;
+    background-color: var(--section-color);
+    color: var(--text-color);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+}
+
+/* Footer */
+
+body > footer {
+    background-color: #14273f;
+    border-top: 2px solid var(--orange);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+body > footer p {
+    margin: 0;
+}
+
+body > footer a {
+    color: var(--gold);
+}
+
+body > footer a:hover {
+    color: white;
+}
+
+/* Mobile screens */
+
+@media (max-width: 600px) {
+    body > header {
+        padding: 1.5rem 1rem;
+    }
+
+    .site-title {
+        font-size: 2.2rem;
+    }
+
+    header nav > ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    header nav a {
+        text-align: center;
+        padding: 0.6em 0.5em;
+    }
+
+    main {
+        margin: 1rem auto;
+        padding: 0 1rem;
+    }
+
+    main section {
+        padding: 1.25rem;
+    }
+
+    main article {
+        padding: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    fieldset {
+        padding: 1rem;
+    }
+
+    body > footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}

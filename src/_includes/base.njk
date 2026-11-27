@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description or 'Benedict’s computer science coursework, projects, and interests.' }}">
+    <link rel="stylesheet" href="{{ '/assets/styles.css' | url }}">
+    <script src="{{ '/assets/theme.js' | url }}" defer></script>
+    {% if project.repository %}
+    <link rel="stylesheet" href="{{ '/assets/repo-panel.css' | url }}">
+    <script src="{{ '/assets/repo-panel.js' | url }}" defer></script>
+    <script src="{{ '/assets/repo-controls.js' | url }}" defer></script>
+    {% endif %}
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header>
+        <p class="site-title">Benedict's Portfolio</p>
+        <nav aria-label="Main navigation">
+            <ul>
+                {% for label, href in [['Home', '/'], ['About', '/about/'], ['Projects', '/projects/'], ['Skills', '/experience/'], ['Interests', '/interests/'], ['Contact', '/contact/']] %}
+                <li><a href="{{ href | url }}"{% if page.url == href or (href == '/projects/' and project) %} aria-current="page"{% endif %}>{{ label }}</a></li>
+                {% endfor %}
+                <li><button id="theme-toggle" type="button" hidden>Use light theme</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="main-content" tabindex="-1">
+        {{ content | safe }}
+    </main>
+    {% include "footer.njk" %}
+</body>
+</html>

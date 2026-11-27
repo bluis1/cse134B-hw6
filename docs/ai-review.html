@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved Codex maintainability review</title>
+<style>
+body { margin: 40px auto; max-width: 860px; padding: 0 28px; font: 18px/1.6 system-ui, sans-serif; color: #17253a; background: #fff; }
+h1 { font-size: 28px; } h2 { font-size: 22px; margin-top: 30px; }
+pre { white-space: pre-wrap; padding: 18px; background: #eef2f6; font: 15px/1.5 monospace; }
+.note { color: #46566a; font-size: 15px; border-bottom: 1px solid #ccd4df; padding-bottom: 18px; }
+</style>
+<h1>Codex maintainability review</h1>
+<p class="note">Saved response for HW6, November 27, 2026. This page is a transcript of the review, displayed in a browser for a readable screenshot. It does not imitate a chat interface.</p>
+<h2>Prompt</h2>
+<p>Review this code from my portfolio for maintainability. Suppose another developer needs to change or extend it next month. Identify one thing that already makes it easy to maintain and suggest one specific improvement. Explain the benefit, one tradeoff, and how I could verify that the behavior still works. Base your review on the code I shared, and tell me if you need more context.</p>
+<h2>Shared excerpt: loadActivity() in src/assets/repo-panel.js</h2>
+<pre>if (!response.ok) {
+    throw new Error(response.status === 403 || response.status === 429
+        ? "GitHub is limiting requests. Wait a little before trying again."
+        : `GitHub returned HTTP ${response.status}. Try again or open the source link.`);
+}
+const data = await response.json();
+if (typeof data?.full_name !== "string" ||
+    data.full_name.toLowerCase() !== this.repository.toLowerCase() ||
+    typeof data.pushed_at !== "string" || !Number.isFinite(Date.parse(data.pushed_at)) ||
+    typeof data.default_branch !== "string" || !data.default_branch.trim() || data.default_branch.length &gt; 200 ||
+    !(data.language === null || (typeof data.language === "string" &amp;&amp; data.language.length &lt;= 100))) {
+    throw new Error("GitHub sent an unexpected response. Try again or use the source link.");
+}</pre>
+<h2>Codex response</h2>
+<p><strong>What helps:</strong> The code checks HTTP status and validates the response fields before using them. The repository identity check is especially useful: a structurally valid response for the wrong repository is still rejected. A maintainer can see which fields the component expects, and HTTP errors have a different explanation from unexpected data.</p>
+<p><strong>One improvement:</strong> Move the compound response-shape condition into a named function, such as <code>isRepositoryData(data, repository)</code>. Pass the expected repository explicitly and keep the existing checks. The function can return a boolean, leaving the current error message and throw in <code>loadActivity()</code>.</p>
+<p><strong>Benefit and tradeoff:</strong> A named validation function would make the request handler easier to scan and give field validation a focused place to change when the API requirements change. The tradeoff is another function to navigate to. Keeping it in the same file would keep that cost small for this component.</p>
+<p><strong>Verification:</strong> Check a valid response, the wrong repository, an invalid date, a blank or overlong branch, a null language, and an unsupported language type. Repeat the component's HTTP-error, malformed-JSON, failure-and-retry, and success checks to confirm that extracting the condition preserves its behavior. I would need the rest of <code>loadActivity()</code> to assess error recovery and DOM rendering; this excerpt alone does not show those parts.</p>
+</html>

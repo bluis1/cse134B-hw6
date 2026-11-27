@@ -1,0 +1,29 @@
+---
+layout: base.njk
+title: "Benedict's Portfolio"
+permalink: /index.html
+---
+<section>
+    <p class="eyebrow">Computer science student · UC San Diego</p>
+    <h1>Hi, I'm Benedict!</h1>
+    <p>I'm studying computer science and learning more about programming and web development. This is where I share the projects I've worked on in my classes, from building this website to working with threads in Nachos.</p>
+    <p>If you're here to look at my work, the projects page is a good place to start.</p>
+    <p><a class="primary-link" href="{{ '/projects/' | url }}">See my projects</a> <a href="{{ '/contact/' | url }}">Get in touch</a></p>
+</section>
+<section>
+    <h2>What I've been working on</h2>
+    {% for project in projects %}
+    {% if loop.index <= 2 %}
+    <article>
+        <h3><a href="{{ ('/projects/' + project.slug + '/') | url }}">{{ project.title }}</a></h3>
+        <p>{{ project.summary }}</p>
+    </article>
+    {% endif %}
+    {% endfor %}
+    <p><a href="{{ '/projects/' | url }}">Browse all projects</a></p>
+</section>
+<section>
+    <h2>Still learning</h2>
+    <p>My coursework has given me practice with HTML, CSS, JavaScript, and operating systems. I'm working on getting more comfortable with debugging and explaining how my code works.</p>
+    <p><a href="{{ '/experience/' | url }}">More about my skills</a></p>
+</section>

@@ -1,0 +1,18 @@
+---
+layout: base.njk
+title: "Projects | Benedict's Portfolio"
+permalink: /projects/index.html
+---
+<section>
+    <h1>My Projects</h1>
+    <p>These projects come from my web development, operating systems, and music classes. Choose one to read what I worked on and what I learned.</p>
+    {% for project in projects %}
+    <article>
+        <p class="eyebrow">{{ project.context }}</p>
+        <h2><a href="{{ ('/projects/' + project.slug + '/') | url }}">{{ project.title }}</a></h2>
+        <p>{{ project.summary }}</p>
+        <p><strong>Tools:</strong> {{ project.tools | join(', ') }}</p>
+        <p><a href="{{ ('/projects/' + project.slug + '/') | url }}">Read about this project</a></p>
+    </article>
+    {% endfor %}
+</section>

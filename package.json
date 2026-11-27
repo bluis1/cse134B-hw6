@@ -1,0 +1,23 @@
+{
+  "name": "benedict-hw6-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "dev": "eleventy --serve --port=8080",
+    "start": "node scripts/serve.mjs",
+    "preview": "node scripts/serve.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "links": "node scripts/create-links.mjs",
+    "verify:clean": "node scripts/verify-clean.mjs",
+    "capture:review": "node scripts/capture-review.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.8",
+    "playwright": "1.60.0"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

@@ -1,0 +1,48 @@
+[
+  {
+    "slug": "personal-portfolio",
+    "title": "Personal Portfolio Website",
+    "summary": "A website I've built over the quarter to practice HTML, CSS, JavaScript, and now Eleventy.",
+    "tools": ["HTML", "CSS", "JavaScript", "Eleventy", "GitHub"],
+    "context": "Web development coursework",
+    "overview": "This started as a set of HTML pages for my web development class. Each assignment added something: responsive styles, theme switching, form validation, and a Web Component. For HW6, I moved the main portfolio into the Eleventy project I started in HW5.",
+    "process": [
+      "I planned the original pages with wireframes and gave each page a specific purpose.",
+      "I built the pages in HTML and added shared styles for narrow screens and light and dark themes.",
+      "I moved repeated navigation and the footer into a shared Eleventy layout. The project index and detail pages now use the same JSON entries."
+    ],
+    "learning": "The main change is how I maintain the site. I can edit the navigation once, or add one project entry, and rebuild instead of changing several HTML files by hand.",
+    "image": "/assets/media/portfolio-preview.png",
+    "imageAlt": "The earlier HTML version of my portfolio homepage",
+    "imageCaption": "An earlier version of this portfolio, before the Eleventy migration.",
+    "repository": "bluis1/cse134B-hw5"
+  },
+  {
+    "slug": "nachos-threads",
+    "title": "Nachos Thread Exercise",
+    "summary": "Operating systems coursework that helped me understand how multiple threads execute and switch between each other.",
+    "tools": ["Nachos", "Linux"],
+    "context": "Operating systems coursework",
+    "overview": "In my operating systems class, I worked with Nachos to run a program involving multiple threads. The exercise connected the ideas from class to the order in which a program actually runs.",
+    "process": [
+      "I ran the threaded program in the course's Nachos environment.",
+      "I followed how execution moved between threads instead of assuming one thread would finish first.",
+      "I used the exercise to connect thread behavior with what we were learning about operating systems."
+    ],
+    "learning": "Working through the program helped me understand thread execution and context switching. It also gave me more practice using Linux for coursework. This page describes the exercise; course source code is not published here."
+  },
+  {
+    "slug": "horror-sound-design",
+    "title": "Horror Sound Design Project",
+    "summary": "A music class project matching sound effects to a short horror clip in DaVinci Resolve.",
+    "tools": ["DaVinci Resolve", "Audio editing"],
+    "context": "Music coursework",
+    "overview": "For a music class project, I added sound effects to a short horror clip. I used DaVinci Resolve to edit the audio and line up sounds with what was happening on screen.",
+    "process": [
+      "I watched the clip to identify moments where sound could support the scene.",
+      "I edited the sound effects in DaVinci Resolve and matched their timing to the video.",
+      "I listened to the audio alongside the picture to hear how it changed the mood."
+    ],
+    "learning": "This project made me pay more attention to sound in movies. One idea that stood out was the stinger: a short sound that emphasizes a sudden moment. A small timing change can make that moment feel different."
+  }
+]
