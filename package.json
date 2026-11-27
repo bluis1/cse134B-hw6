@@ -11,7 +11,8 @@
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "links": "node scripts/create-links.mjs",
     "verify:clean": "node scripts/verify-clean.mjs",
-    "capture:review": "node scripts/capture-review.mjs"
+    "capture:review": "node scripts/capture-review.mjs",
+    "test:deployed": "node scripts/check-deployment.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.8",

@@ -1,20 +1,20 @@
 # HW6 requirement check
 
-This checklist covers every required item in the supplied assignment text. The linked Canvas download was not accessible, and the text did not contain a separate scoring table. No HW5 point values are reused here.
+This checklist covers every required item in the pasted instructions, which the owner confirmed are the complete assignment. The text does not include a separate scoring table. No HW5 point values are reused here.
 
 ## Project and repository
 
 | Requirement | Implementation or status |
 | --- | --- |
 | Begin with a copy of HW5 | The original ZIP was read without modification. Its Eleventy configuration, source pages, theme script, styles, images, and preview helper were copied into this folder and adapted. |
-| New HW6 repository; do not push to HW5 | The public repository `https://github.com/bluis1/cse134B-hw6` exists and is currently empty. The owner initialized Git locally; the first commit and push are still pending. No old remote was copied, and the assistant has not made commits or added coauthor metadata. |
+| New HW6 repository; do not push to HW5 | The owner created and pushed `https://github.com/bluis1/cse134B-hw6`. The local `origin` points to that HW6 repository. The existing commit is authored and committed by `bluis1 <bluis@ucsd.edu>`, with no coauthor trailers. Final documentation/evidence changes remain for the owner's manual commit and push. |
 | Astro or Eleventy is the main project | Eleventy 3.1.8, `package.json`, lockfile, and `eleventy.config.js` are at the root. |
 | One build produces the full site | `npm run build` writes all nine pages plus local assets to `dist/`. |
-| Keep source, configuration, dependency lockfile | Present; the owner will commit them. `node_modules` and generated output are ignored. |
+| Keep source, configuration, dependency lockfile | Present in the public repository. `node_modules` and generated output are ignored. Final documentation/evidence changes need the owner's last commit. |
 | Remove unrelated coursework and unused copies | No cheese exercise, old standalone site, `ssg-exercise`, random facts widget, separate form exercises, or unused sample audio/video. No experiments are retained that need separate labeling. |
 | Fresh-checkout build and preview | `npm run verify:clean` passed in a clean temporary source copy with a separate install and HTTP preview. README names Node/npm versions and install/build/preview commands. |
 | Local finished-output preview | `scripts/serve.mjs` serves `dist/`; browser tests request all pages directly. |
-| Deploy publicly and compare with local preview | Pending manual publishing. `netlify.toml` provides build/publish settings. Public checks are listed in `TESTING.md`. |
+| Deploy publicly and compare with local preview | `https://cse134b-hw6.netlify.app/` is public. All nine pages pass browser checks, and all 17 deployed output files match the local build, allowing line-ending changes and Netlify's hosting additions. |
 | Portable complete static output | `dist/` includes HTML, CSS, scripts, and used images. Templates use the `url` filter and do not embed a hosting domain. A nested path-prefix build is tested. |
 
 ## Part 1: shared portfolio
@@ -63,15 +63,15 @@ This checklist covers every required item in the supplied assignment text. The l
 | Keyboard operation | Native buttons, Enter/Space activation, visible focus, working links. |
 | Failed request after load and successful retry | Browser test loads success, intercepts later network/HTTP/JSON/shape failures, verifies retained result and enabled retry, then restores success without navigation. |
 | No-JS main content and fallback | Generated HTML stays readable; ordinary navigation works; static source link and `noscript` explanation remain; JS-only buttons stay hidden. |
-| Repeat checks on deployed site | Still pending the owner's deployment. Local observations are explicitly identified in README answer 2. |
+| Repeat checks on deployed site | All five public-site browser test groups pass, including real API success, deliberate request blocking, successful unblocked retry, keyboard use, storage, both themes, mobile layout, and no-JavaScript navigation. README answer 2 records deployed observations. |
 
 ## Part 4: Portfolio Walkthrough
 
 | Requirement | README evidence |
 | --- | --- |
 | Root README section named Portfolio Walkthrough | Present with answers numbered 1–5. |
-| Q1: audience, task, visitor path, placement, files, build/browser/network behavior | Answer 1 addresses each item with concrete labels, routes, and source paths. Actual deployment links will be inserted after publishing. |
-| Q2: successful, blocked, retried request; no-JS observations; relevant code | Answer 2 documents local results, screenshots, code paths, and the remaining public-host verification. |
+| Q1: audience, task, visitor path, placement, files, build/browser/network behavior | Answer 1 addresses each item with concrete labels, deployed links, routes, and source paths. |
+| Q2: successful, blocked, retried request; no-JS observations; relevant code | Answer 2 documents deployed results, screenshots, the real blocked/unblocked API sequence, no-JavaScript behavior, and code paths. |
 | Q3: select one option | Selected HTTP errors: why `fetch()` resolves a 404, where `response.ok` is checked, and visitor feedback. |
 | Q4: select one scenario, design and technical proposal | Selected API unavailability: dated cross-visit cache proposal, source files, age/validation rules, visitor benefit, tradeoff, and tests. Clearly labeled unimplemented. |
 | Q5: short excerpt from an allowed source and exact AI review prompt | The excerpt is the HTTP/status and response-validation code in the Web Component's `loadActivity()` method, preserved with the exact prompt in `docs/ai-review.html`. |
@@ -82,14 +82,14 @@ This checklist covers every required item in the supplied assignment text. The l
 
 | Requirement | Status |
 | --- | --- |
-| One plain-text `links.txt`, four full HTTPS URLs in required order | `npm run links -- REPOSITORY-URL DEPLOYMENT-URL` generates it and updates README links. Actual URLs do not exist yet, so no fictional submission file is supplied. |
+| One plain-text `links.txt`, four full HTTPS URLs in required order | Generated from the actual public repository and Netlify URL. All four URLs were accessed without authentication. The file and README link update need the final manual commit and Gradescope submission. |
 | Repository root, homepage, index, component page | Generator writes exactly these four lines; component route is `/projects/personal-portfolio/`. |
-| Public access and source/deployment match through grading | Owner must verify after manual publishing. |
+| Public access and source/deployment match through grading | Public access and matching output verified on November 27, 2026. The owner must keep both online through grading and confirm Netlify rebuilds after the final documentation commit. |
 | README build, preview, Node version, output folder | Present. |
-| README shared-layout and collection rebuild checks, affected deployed links | Source paths, reproduction steps, and local test evidence present. Links filled by the links command after publishing. |
+| README shared-layout and collection rebuild checks, affected deployed links | Source paths, reproduction steps, local rebuild evidence, and actual deployed page links are present. |
 | README all selected walkthrough answers and committed AI screenshot | Files are present; owner must review and commit manually. |
 | Extra credit if completed | Not attempted. Optional SPA/POST requirements are not presented as required portfolio work or claimed as complete. |
 
 ## Methods and boundaries
 
-The supplied HW6 text requires Astro or Eleventy, and this project uses Eleventy. It calls for real API requests, safe rendering, localStorage, shared layouts, generated content, and a portable static build; those methods are used directly. It does not include a blanket AI prohibition; it explicitly requests an AI review for question 5. The optional SPA section recommends practicing JavaScript by hand and has been left for the owner. Additional course policies or Canvas-only rubric details were not available.
+The supplied HW6 text requires Astro or Eleventy, and this project uses Eleventy. It calls for real API requests, safe rendering, localStorage, shared layouts, generated content, and a portable static build; those methods are used directly. It explicitly requests an AI review for question 5. The optional SPA section recommends practicing JavaScript by hand and has been left for the owner. The pasted text is the complete assignment source for this checklist.

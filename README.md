@@ -30,9 +30,15 @@ Browser tests use an installed Google Chrome through Playwright. Chrome is only 
 ## Pages and deployment
 
 <!-- deployment:start -->
-- [HW6 repository](https://github.com/bluis1/cse134B-hw6) — public; source files still need to be committed and pushed.
-
-The public deployment has not been created yet. Run the links command below after deploying; it replaces this block with all the actual submission and page links.
+- [HW6 repository](https://github.com/bluis1/cse134B-hw6)
+- [Homepage](https://cse134b-hw6.netlify.app/)
+- [About](https://cse134b-hw6.netlify.app/about/)
+- [Skills](https://cse134b-hw6.netlify.app/experience/)
+- [Interests](https://cse134b-hw6.netlify.app/interests/)
+- [Contact](https://cse134b-hw6.netlify.app/contact/)
+- [Collection index](https://cse134b-hw6.netlify.app/projects/)
+- [Third collection entry](https://cse134b-hw6.netlify.app/projects/horror-sound-design/)
+- [Web Component page](https://cse134b-hw6.netlify.app/projects/personal-portfolio/)
 <!-- deployment:end -->
 
 | Page | Route |
@@ -47,9 +53,9 @@ The public deployment has not been created yet. Run the links command below afte
 | Nachos project | `/projects/nachos-threads/` |
 | Third entry: sound design | `/projects/horror-sound-design/` |
 
-Create a new, publicly readable **HW6** repository and push these source files, configuration, lockfile, README, tests, and `docs/` images there. Do not reuse the HW5 remote. `node_modules/` and `dist/` are ignored.
+The source is in the public **HW6** repository linked above. Keep the source files, configuration, lockfile, README, tests, and `docs/` images committed there. `node_modules/` and `dist/` are ignored.
 
-On Netlify, import the new repository. The included `netlify.toml` sets:
+The site is deployed on Netlify from that repository. The included `netlify.toml` sets:
 
 - Build command: `npm run build`
 - Publish directory: `dist`
@@ -57,13 +63,13 @@ On Netlify, import the new repository. The included `netlify.toml` sets:
 
 For a manual deployment, run the build and upload `dist/` to a new static site. Keep the public site and repository available through grading. Do not replace the HW5 deployment. Another static host can serve the same folder. For hosting below a subdirectory, build with `npm run build -- --pathprefix=/your-folder/`; internal links and asset paths use Eleventy's `url` filter. No current hosting domain is embedded in the templates.
 
-Once the real repository and deployment exist, substitute their URLs here:
+To regenerate the submission links:
 
 ```sh
-npm run links -- https://github.com/YOUR-USERNAME/YOUR-HW6-REPO https://YOUR-HW6-SITE/
+npm run links -- https://github.com/bluis1/cse134B-hw6 https://cse134b-hw6.netlify.app/
 ```
 
-This creates **`links.txt`** with exactly four plain HTTPS URLs, in order: repository, homepage, collection index, component page. It also fills in the deployment links above. `links.txt` is intentionally not filled with guessed URLs. Open all four while signed out, commit the updated README and links, and upload `links.txt` to Gradescope. Do not upload a ZIP in its place.
+This creates **`links.txt`** with exactly four plain HTTPS URLs, in order: repository, homepage, collection index, component page. It also fills in the deployment links above. All four URLs were checked without authentication on November 27, 2026. Commit the updated README, deployment evidence, and links file, then upload `links.txt` to Gradescope. Do not upload a ZIP in its place.
 
 ## Rebuild checks for Parts 1 and 2
 
@@ -75,7 +81,7 @@ The collection source is **`src/_data/projects.json`**. `src/projects.njk` rende
 
 The reproducible addition check in `tests/build.test.mjs` first builds just the portfolio and Nachos entries. It confirms that the third page does not exist. It then adds the sound-design entry through JSON alone, rebuilds, and verifies both its index link and its detail page. The final source includes all three entries. The test also changes a title in the data and verifies both views, including assets under a non-root path prefix.
 
-To repeat by hand, make a temporary copy, keep the first two JSON entries, and build. Add the third entry back without editing a template, rebuild, and visit `/projects/` and `/projects/horror-sound-design/` directly. With JavaScript disabled, follow all three collection links. The deployed collection and third-entry links are listed above once the actual host is known.
+To repeat by hand, make a temporary copy, keep the first two JSON entries, and build. Add the third entry back without editing a template, rebuild, and visit `/projects/` and `/projects/horror-sound-design/` directly. With JavaScript disabled, follow all three collection links. The final [deployed collection](https://cse134b-hw6.netlify.app/projects/) and [third detail page](https://cse134b-hw6.netlify.app/projects/horror-sound-design/) were also checked directly and through ordinary navigation without JavaScript.
 
 ## Portfolio Walkthrough
 
@@ -83,7 +89,7 @@ To repeat by hand, make a temporary copy, keep the first two JSON entries, and b
 
 The site is for someone looking at my work, such as a recruiter or another student. One task is to find a project, understand what I worked on, and inspect the source if it is public.
 
-Starting at the homepage, use **See my projects**, then **Personal Portfolio Website**. On that detail page, **Check GitHub activity** requests the earlier portfolio repository's latest push date. **Hide repository details** changes how much information is shown and remembers the setting. The GitHub source link opens the earlier code. Contact is available from every page and includes `bluis@ucsd.edu`.
+Starting at the [deployed homepage](https://cse134b-hw6.netlify.app/), use **See my projects**, then **Personal Portfolio Website**. On that [detail page](https://cse134b-hw6.netlify.app/projects/personal-portfolio/), **Check GitHub activity** requests the earlier portfolio repository's latest push date. **Hide repository details** changes how much information is shown and remembers the setting. The GitHub source link opens the earlier code. Contact is available from every page and includes `bluis@ucsd.edu`.
 
 I placed the component beside the portfolio write-up because that is where the source link is useful. It describes the HW5 repository explicitly, so its date is not presented as the deployment date of HW6. The unrelated study-break facts from HW5 were removed.
 
@@ -93,9 +99,9 @@ At build time, Eleventy writes the full HTML pages and copies assets into `dist/
 
 ### 2. Success, failure, retry, and no JavaScript
 
-**Verification status:** These observations are from the local finished build in Chrome. The public HW6 site does not exist yet, so deployed observations remain to be recorded using `TESTING.md`. The automated live request succeeded against the real public GitHub API; separate intercepted requests exercise failure cases.
+**Verification status:** These observations were recorded on the [public Netlify component page](https://cse134b-hw6.netlify.app/projects/personal-portfolio/) in Chrome on November 27, 2026, without signing in. `npm run test:deployed -- https://cse134b-hw6.netlify.app/` passed all five browser test groups. The real API request succeeded, a later request was deliberately blocked, and unblocking it allowed a successful retry on the same page. Additional intercepted responses check HTTP and malformed-data errors.
 
-On success, the component shows **Latest push**, a UTC date, the default branch, the main language, and the time of the check. On the real local check, GitHub returned the repository `bluis1/cse134B-hw5`, a push timestamp of `2026-11-20T04:17:57Z`, branch `main`, and language `HTML`.
+On success, the component shows **Latest push**, a UTC date, the default branch, the main language, and the time of the check. On the deployed check, GitHub returned the repository `bluis1/cse134B-hw5`, a push timestamp of `2026-11-20T04:17:57Z`, branch `main`, and language `HTML`. The displayed check time was November 27, 2026 at 10:56 AM UTC.
 
 After an initial success, blocking the next request leaves that result visible. The status says **Could not reach GitHub. Check your connection and try again.** It also says the last result has not been refreshed, and the button becomes **Try GitHub again**. Removing the block and activating that button loads the result without a page reload. While loading, only the request button is disabled; the surrounding display control and navigation remain usable.
 
@@ -103,7 +109,9 @@ After an initial success, blocking the next request leaves that result visible. 
 
 Without JavaScript, the generated project description, three project pages, index, navigation, and contact links remain readable. The literal markup in `src/project.njk` supplies the GitHub link and an explanation that live activity needs JavaScript. Both enhancement-only buttons stay hidden. The no-JavaScript test follows ordinary links from Home through the index to the third detail page and directly opens the component page.
 
-Evidence: [real API result](docs/screenshots/component-live.png), [blocked request after success](docs/screenshots/component-error.png), and [JavaScript disabled](docs/screenshots/no-javascript.png). The error screenshot uses a test-intercepted failed request; it is not evidence of a GitHub outage.
+Deployed evidence: [real API result](docs/screenshots/deployed/component-live.png), [blocked request after success](docs/screenshots/deployed/component-live-blocked.png), [successful retry after unblocking](docs/screenshots/deployed/component-live-retry.png), and [JavaScript disabled](docs/screenshots/deployed/no-javascript.png). [Observed messages](docs/screenshots/deployed/observations.json) record the public URL and check time. The blocked request is a deliberate browser-test simulation; it is not evidence of a GitHub outage.
+
+The public site also passed the keyboard, stored-preference, light/dark theme, and 360px layout checks. All 17 generated site files match the local finished build after accounting for Windows line endings and Netlify's added hosting comment and toolbar script.
 
 ### 3. Chosen option: why fetch does not catch a 404 by itself
 
@@ -131,17 +139,16 @@ The AI also said it needed the rest of the method to assess recovery and renderi
 
 ## Remaining submission work
 
-1. Commit and push the prepared files to the public HW6 repository, then publish the built site; these steps are being handled manually by the owner.
-2. Run the links command using the actual URLs, then commit its README update and four-line `links.txt`.
-3. Repeat the browser checks on the public host and replace the local-only status in Walkthrough answer 2 with the actual deployed observations. Confirm that the deployed version matches the committed source.
-4. Review the walkthrough wording and the AI response screenshot before submitting. If the instructor requires the original chat UI rather than a saved-response screenshot, replace `docs/ai-review.png` with that screenshot.
-5. Submit `links.txt` to Gradescope and keep the site and repository public through grading.
+1. Review the walkthrough wording and the AI response screenshot before submitting. The screenshot shows the saved AI response in a browser, as labeled above.
+2. Commit and push the updated README, requirement/testing notes, deployment checker, deployed screenshots, and four-line `links.txt` manually.
+3. Wait for Netlify to finish rebuilding after that push, then confirm the links and README evidence are available publicly. The site source itself has not changed during the deployed checks.
+4. Submit `links.txt` to Gradescope and keep the site and repository public through grading.
 
 The optional SPA extra credit is not included. The pasted assignment recommends practicing that optional JavaScript by hand. The course POST endpoint is not needed for the required portfolio/component work.
 
 ## References and requirement coverage
 
-[REQUIREMENTS.md](REQUIREMENTS.md) maps the supplied assignment to files and checks. [TESTING.md](TESTING.md) records the checks and the remaining public-deployment steps. The pasted assignment was available in full; its linked Canvas download could not be opened, and no separate point-by-point HW6 rubric was supplied.
+[REQUIREMENTS.md](REQUIREMENTS.md) maps the supplied assignment to files and checks. [TESTING.md](TESTING.md) records local and public-deployment verification. The pasted instructions were confirmed to be the complete assignment; no point values have been inferred beyond that text.
 
 - [Eleventy pagination](https://www.11ty.dev/docs/pagination/) and [URL filter](https://www.11ty.dev/docs/filters/url/)
 - [GitHub repository API](https://docs.github.com/en/rest/repos/repos#get-a-repository)

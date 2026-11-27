@@ -1,6 +1,6 @@
 # Verification notes
 
-Local checks passed on November 27, 2026 with Node 24.11.0, npm 11.6.1, and installed Google Chrome. The HW6 repository and public host have not been created yet. These results describe the local built output.
+Local and public-deployment checks passed on November 27, 2026 with Node 24.11.0, npm 11.6.1, and installed Google Chrome. The public site is <https://cse134b-hw6.netlify.app/>, and the public source repository is <https://github.com/bluis1/cse134B-hw6>.
 
 ## Completed
 
@@ -15,6 +15,10 @@ Local checks passed on November 27, 2026 with Node 24.11.0, npm 11.6.1, and inst
 - With JavaScript disabled and reduced motion requested, Home → Projects → the third entry works using ordinary links. The component page keeps the source link and fallback explanation; enhancement-only controls are hidden.
 - Every page fits a 360px-wide viewport without horizontal overflow. Desktop, mobile, both themes, real API success, blocked requests, and no-JS screenshots were captured. The home and AI-review screenshots were visually inspected.
 - The rebuild test starts with two entries, adds the third through JSON only, checks both outputs, changes a shared footer across all nine pages, and checks a title edit and `/portfolio/` path-prefix build.
+- `npm run test:deployed -- https://cse134b-hw6.netlify.app/`: all five Chrome test groups pass against the public site. All nine pages and their internal links open without authentication. Local and deployed HTML/CSS/JS match after normalizing line endings and removing Netlify's observed hosting comment and toolbar injection; images match byte for byte. All 17 generated files were compared.
+- The deployed real API test loads a response, blocks a later request, verifies the stale-result/error message, removes the block, and activates retry by keyboard. The real API succeeds again without navigating. Screenshots and observed messages are in `docs/screenshots/deployed/`.
+- The deployed site also passes saved preferences in both directions, blocked storage, both themes, keyboard focus and controls, 360px layouts, no-JavaScript collection navigation, and static component fallback.
+- Local Git HEAD and public GitHub `main` both pointed to `7c80446c681775156a7138feca0d130d1f4d68ac` when the deployment was checked. The latest documentation, checker, screenshot evidence, and submission links still need the owner's final manual commit and push.
 
 The API request has a ten-second timeout in code. Screen-reader announcement timing and behavior in browsers other than Chrome have not been manually verified.
 
@@ -32,9 +36,16 @@ The tests use an available local port automatically. The normal preview is <http
 
 The tests expect an installed Google Chrome. If it is unavailable on another computer, install Chrome or change the Playwright launch channel to a browser available on that machine. This does not affect the build.
 
-## Public deployment checks still required
+## Repeating the public deployment checks
 
-Run these after creating the HW6 repository and publishing its build. Record the actual observations in README answer 2; do not claim the local checks were run on a public host.
+The current public build passed these browser and file-comparison checks, and README answer 2 records the deployed observations. To repeat the automated checks:
+
+```sh
+npm run build
+npm run test:deployed -- https://cse134b-hw6.netlify.app/
+```
+
+The command compares the finished output and runs the same five browser test groups against the host, saving deployed evidence separately from local screenshots. Rebuild-edit checks remain isolated in temporary local copies so throwaway content is not published. For a manual review:
 
 1. Open the repository and all four generated `links.txt` URLs while signed out. Confirm that the site is HW6 and reflects the source that was pushed.
 2. From Home, use Projects, open all three entries, return to the index, then use About, Skills, Interests, and Contact. Open each nested page directly and reload it. Check styles, profile images, the portfolio screenshot, and scripts.

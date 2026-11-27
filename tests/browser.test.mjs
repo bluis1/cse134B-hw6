@@ -1,8 +1,7 @@
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdir } from "node:fs/promises";
-import path from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
 let base;
@@ -10,21 +9,26 @@ const componentPage = "/projects/personal-portfolio/";
 const api = "https://api.github.com/repos/bluis1/cse134B-hw5";
 const data = { full_name: "bluis1/cse134B-hw5", pushed_at: "2026-11-20T04:17:57Z", default_branch: "main", language: "HTML" };
 let server, browser;
+const screenshotDirectory = process.env.HW6_SITE_URL ? "docs/screenshots/deployed" : "docs/screenshots";
 
 before(async () => {
-    server = spawn(process.execPath, ["scripts/serve.mjs"], { env: { ...process.env, PORT: "0" }, stdio: "pipe" });
-    await new Promise((resolve, reject) => {
-        let errors = "";
-        server.stderr.on("data", chunk => { errors += chunk; });
-        server.once("error", reject);
-        server.stdout.once("data", chunk => {
-            base = String(chunk).match(/Portfolio: (\S+)/)[1].replace(/\/$/, "");
-            resolve();
+    if (process.env.HW6_SITE_URL) {
+        base = process.env.HW6_SITE_URL.replace(/\/$/, "");
+    } else {
+        server = spawn(process.execPath, ["scripts/serve.mjs"], { env: { ...process.env, PORT: "0" }, stdio: "pipe" });
+        await new Promise((resolve, reject) => {
+            let errors = "";
+            server.stderr.on("data", chunk => { errors += chunk; });
+            server.once("error", reject);
+            server.stdout.once("data", chunk => {
+                base = String(chunk).match(/Portfolio: (\S+)/)[1].replace(/\/$/, "");
+                resolve();
+            });
+            server.once("exit", code => reject(new Error(`Preview server exited: ${code}\n${errors}`)));
         });
-        server.once("exit", code => reject(new Error(`Preview server exited: ${code}\n${errors}`)));
-    });
+    }
     browser = await chromium.launch({ channel: "chrome", headless: true });
-    await mkdir("docs/screenshots", { recursive: true });
+    await mkdir(screenshotDirectory, { recursive: true });
 });
 
 after(async () => {
@@ -37,13 +41,17 @@ test("every generated page opens directly, with assets, one heading, and working
     const pages = ["/", "/about/", "/projects/", "/experience/", "/interests/", "/contact/", componentPage, "/projects/nachos-threads/", "/projects/horror-sound-design/"];
     const failures = [];
     page.on("pageerror", error => failures.push(error.message));
-    page.on("response", response => { if (response.url().startsWith(base) && !response.ok()) failures.push(`${response.status()} ${response.url()}`); });
+    page.on("response", response => { if (response.url().startsWith(base) && response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
     for (const url of pages) {
         assert.equal((await page.goto(base + url)).status(), 200);
         assert.equal(await page.locator("h1").count(), 1);
         assert.equal(await page.locator('nav [aria-current="page"]').count(), 1);
         assert.ok(await page.locator("body").evaluate(el => getComputedStyle(el).backgroundColor !== "rgba(0, 0, 0, 0)"));
-        assert.ok(await page.locator("img").evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0)));
+        for (const image of await page.locator("main img").all()) {
+            await image.scrollIntoViewIfNeeded();
+            await image.evaluate(element => element.decode());
+            assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0));
+        }
         const links = await page.locator("a[href]").evaluateAll(anchors => anchors.map(a => a.href).filter(href => href.startsWith(location.origin)));
         for (const link of new Set(links)) assert.equal((await page.request.get(link)).status(), 200, link);
     }
@@ -63,25 +71,30 @@ test("keyboard controls, saved mode, both themes, and blocked storage", async ()
     await page.getByRole("link", { name: "Personal Portfolio Website", exact: true }).click();
     assert.ok(page.url().endsWith(componentPage));
     const mode = page.locator("#repo-mode-toggle");
+    await mode.waitFor({ state: "visible" });
     await mode.focus();
     await page.keyboard.press("Enter");
+    await page.locator("repo-panel[compact]").waitFor({ state: "attached" });
     assert.ok(await page.locator("repo-panel").evaluate(el => el.hasAttribute("compact")));
     await page.reload();
+    await mode.waitFor({ state: "visible" });
     assert.equal(await mode.getAttribute("aria-expanded"), "false");
     assert.ok(await page.locator(".repo-panel__details").isHidden());
     await mode.focus();
     await page.keyboard.press("Space");
+    await page.locator("repo-panel:not([compact])").waitFor({ state: "attached" });
     assert.ok(await page.locator(".repo-panel__details").isVisible());
     await page.locator("repo-panel button").focus();
     await page.keyboard.press("Enter");
     await page.waitForSelector('[data-state="success"]');
     assert.match(await page.locator("repo-panel").textContent(), /Latest push:.*Nov 20, 2026/);
-    await page.screenshot({ path: "docs/screenshots/component-dark.png", fullPage: true });
+    await page.screenshot({ path: `${screenshotDirectory}/component-dark.png`, fullPage: true });
     await page.locator("#theme-toggle").click();
     assert.ok(await page.locator("body").evaluate(el => el.classList.contains("light-theme")));
-    await page.screenshot({ path: "docs/screenshots/component-light.png", fullPage: true });
+    await page.screenshot({ path: `${screenshotDirectory}/component-light.png`, fullPage: true });
     await page.reload();
     assert.ok(await page.locator("body").evaluate(el => el.classList.contains("light-theme")));
+    assert.equal(await mode.getAttribute("aria-expanded"), "true");
     await context.close();
 
     const blocked = await browser.newContext();
@@ -133,7 +146,7 @@ test("loading, network failure after success, same-page retry, HTTP and malforme
         assert.ok(await request.isEnabled());
         assert.equal(await page.locator("repo-panel .repo-panel__surface > p").first().textContent(), result);
         assert.match(await page.locator('[role="status"]').textContent(), /has not been refreshed/);
-        if (responseMode === "offline") await page.screenshot({ path: "docs/screenshots/component-error.png", fullPage: true });
+        if (responseMode === "offline") await page.screenshot({ path: `${screenshotDirectory}/component-error.png`, fullPage: true });
         if (responseMode === "http") assert.match(await page.locator('[role="status"]').textContent(), /HTTP 404/);
     }
     responseMode = "markup";
@@ -163,7 +176,7 @@ test("navigation and collection work without JavaScript; 360px pages do not over
     assert.ok(await page.locator("noscript").isVisible());
     assert.ok(await page.locator("#repo-mode-toggle").isHidden());
     assert.ok(await page.locator("#theme-toggle").isHidden());
-    await page.screenshot({ path: "docs/screenshots/no-javascript.png", fullPage: true });
+    await page.screenshot({ path: `${screenshotDirectory}/no-javascript.png`, fullPage: true });
     await context.close();
 
     const mobile = await browser.newPage({ viewport: { width: 360, height: 800 } });
@@ -172,18 +185,36 @@ test("navigation and collection work without JavaScript; 360px pages do not over
         assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), url);
     }
     await mobile.goto(base);
-    await mobile.screenshot({ path: "docs/screenshots/home-mobile.png", fullPage: true });
+    await mobile.screenshot({ path: `${screenshotDirectory}/home-mobile.png`, fullPage: true });
     await mobile.setViewportSize({ width: 1440, height: 1000 });
-    await mobile.screenshot({ path: "docs/screenshots/home-desktop.png", fullPage: true });
+    await mobile.screenshot({ path: `${screenshotDirectory}/home-desktop.png`, fullPage: true });
     await mobile.close();
 });
 
-test("real public GitHub API succeeds from the browser", async () => {
+test("real public GitHub API succeeds, explains a blocked request, and recovers after unblocking", async () => {
     const page = await browser.newPage();
     await page.goto(base + componentPage);
     await page.locator("repo-panel button").click();
     await page.waitForSelector('[data-state="success"]', { timeout: 15000 });
     assert.match(await page.locator("repo-panel").textContent(), /Latest push:/);
-    await page.screenshot({ path: "docs/screenshots/component-live.png", fullPage: true });
+    await page.screenshot({ path: `${screenshotDirectory}/component-live.png`, fullPage: true });
+    const success = await page.locator("repo-panel").innerText();
+    const beforeRetryURL = page.url();
+    await page.route(api, route => route.abort("internetdisconnected"));
+    await page.locator("repo-panel button").click();
+    await page.waitForSelector('[data-state="error"]');
+    const failure = await page.locator('[role="status"]').textContent();
+    assert.match(failure, /has not been refreshed/);
+    await page.screenshot({ path: `${screenshotDirectory}/component-live-blocked.png`, fullPage: true });
+    await page.unroute(api);
+    await page.locator("repo-panel button").focus();
+    await page.keyboard.press("Enter");
+    await page.waitForSelector('[data-state="success"]', { timeout: 15000 });
+    assert.equal(page.url(), beforeRetryURL);
+    const retry = await page.locator('[role="status"]').textContent();
+    await page.screenshot({ path: `${screenshotDirectory}/component-live-retry.png`, fullPage: true });
+    await writeFile(`${screenshotDirectory}/observations.json`, JSON.stringify({
+        base, checkedAt: new Date().toISOString(), success, failure, retry, samePageRetry: true
+    }, null, 2) + "\n");
     await page.close();
 });
